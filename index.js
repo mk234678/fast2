@@ -1,5 +1,7 @@
 // Import the framework and instantiate it
 import Fastify from 'fastify'
+const port = process.env.PORT || 9000;
+const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
 const fastify = Fastify({
   logger: true
 })
@@ -10,9 +12,9 @@ fastify.get('/', async function handler (request, reply) {
 })
 
 // Run the server!
-try {
-  await fastify.listen({ port: 9000 })
-} catch (err) {
-  fastify.log.error(err)
-  process.exit(1)
-}
+fastify.listen({host: host, port: port }, function (err, address) {
+    if (err) {
+      fastify.log.error(err)
+      process.exit(1)
+    }
+  })
